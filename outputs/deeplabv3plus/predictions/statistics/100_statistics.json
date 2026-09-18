@@ -1,0 +1,19 @@
+{
+    "height": 2048,
+    "width": 2048,
+    "total_pixels": 4194304,
+    "tree_pixels": 286569,
+    "background_pixels": 3907735,
+    "tree_percentage": 6.832337379455566,
+    "background_percentage": 93.16766262054443,
+    "instance_count": 461,
+    "min_instance_area_pixel": 55,
+    "max_instance_area_pixel": 3815,
+    "mean_instance_area_pixel": 532.8958785249457,
+    "median_instance_area_pixel": 431.0,
+    "tree_type": "Tree - jenis belum teridentifikasi",
+    "total_patches": 25,
+    "tree_threshold": 0.5,
+    "min_instance_area": 100,
+    "watershed_min_distance": 20
+}

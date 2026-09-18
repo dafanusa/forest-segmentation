@@ -1,0 +1,12 @@
+﻿file,width,height,total_pixels,tree_pixels,background_pixels,tree_percentage,background_percentage,instance_count,min_instance_area_pixel,max_instance_area_pixel,mean_instance_area_pixel,median_instance_area_pixel,tree_type,total_patches,tree_threshold,processing_time_seconds
+100.tif,2048,2048,4194304,286569,3907735,6.8323,93.1677,461,55,3815,532.9,431.0,Tree - jenis belum teridentifikasi,25,0.5,18.43
+1064.tif,2048,2048,4194304,256760,3937544,6.1216,93.8784,475,70,4632,345.57,201.0,Tree - jenis belum teridentifikasi,25,0.5,19.39
+108.tif,2048,2048,4194304,304773,3889531,7.2664,92.7336,690,55,2288,318.12,243.5,Tree - jenis belum teridentifikasi,25,0.5,28.48
+114.tif,2048,2048,4194304,372075,3822229,8.871,91.129,732,44,5160,379.05,241.0,Tree - jenis belum teridentifikasi,25,0.5,29.27
+1156.tif,2048,2048,4194304,136640,4057664,3.2578,96.7422,322,49,1044,203.33,166.0,Tree - jenis belum teridentifikasi,25,0.5,17.5
+1212.tif,2048,2048,4194304,162921,4031383,3.8843,96.1157,392,56,949,209.41,161.0,Tree - jenis belum teridentifikasi,25,0.5,17.29
+131.tif,2048,2048,4194304,321556,3872748,7.6665,92.3335,658,42,5339,321.67,206.0,Tree - jenis belum teridentifikasi,25,0.5,27.59
+163.tif,2048,2048,4194304,220777,3973527,5.2637,94.7363,469,60,2121,317.16,224.0,Tree - jenis belum teridentifikasi,25,0.5,22.53
+713.tif,2048,2048,4194304,173229,4021075,4.1301,95.8699,314,56,6564,345.08,193.5,Tree - jenis belum teridentifikasi,25,0.5,15.73
+770.tif,2048,2048,4194304,172687,4021617,4.1172,95.8828,420,34,926,210.62,175.0,Tree - jenis belum teridentifikasi,25,0.5,23.13
+semantic_mask.tif,2048,2048,4194304,1835610,2358694,43.7644,56.2356,377,198,162867,4836.94,1218.0,Tree - jenis belum teridentifikasi,25,0.5,16.66

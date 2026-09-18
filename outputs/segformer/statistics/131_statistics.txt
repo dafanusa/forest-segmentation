@@ -1,0 +1,18 @@
+======================================================================
+STATISTIK PREDIKSI SEGFORMER
+======================================================================
+image_height: 2048
+image_width: 2048
+total_pixels: 4194304
+tree_pixels: 67032
+background_pixels: 4127272
+tree_percentage: 1.5981674194335938
+background_percentage: 98.4018325805664
+total_instances: 178
+mean_tree_probability: 0.10038045048713684
+max_tree_probability: 0.9281907081604004
+min_tree_probability: 2.0831735980664234e-07
+input_file: D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\tcd_dataset\dataset\131.tif
+model_path: D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\checkpoints\segformer_b5\best_model
+model_name: nvidia/segformer-b5-finetuned-ade-640-640
+tree_threshold: 0.5

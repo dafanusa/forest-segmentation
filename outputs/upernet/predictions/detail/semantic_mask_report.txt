@@ -1,0 +1,43 @@
+==========================================================================================
+LAPORAN DETAIL INFERENCE UPERNET
+==========================================================================================
+
+INFORMASI CITRA
+------------------------------------------------------------------------------------------
+Nama file        : semantic_mask.tif
+Lokasi input     : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\tcd_dataset\dataset\semantic_mask.tif
+Ukuran citra     : 2048 x 2048 piksel
+Total piksel     : 4,194,304
+
+HASIL SEMANTIC SEGMENTATION
+------------------------------------------------------------------------------------------
+Piksel pohon     : 0
+Piksel background: 4,194,304
+Persentase pohon : 0.0000%
+Persentase background: 100.0000%
+
+HASIL INSTANCE SEGMENTATION
+------------------------------------------------------------------------------------------
+Jumlah instance  : 0
+Luas minimum     : 0 piksel
+Luas maksimum    : 0 piksel
+Rata-rata luas   : 0.00 piksel
+Median luas      : 0.00 piksel
+Jenis objek      : Tree - jenis belum teridentifikasi
+
+DETAIL INSTANCE
+------------------------------------------------------------------------------------------
+Tidak ada instance pohon yang terdeteksi.
+
+FILE OUTPUT
+------------------------------------------------------------------------------------------
+Semantic mask                 : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\semantic\semantic_mask_semantic.png
+Instance mask                 : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\instance\semantic_mask_instance.tif
+Semantic overlay              : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\overlay_semantic\semantic_mask_semantic_overlay.png
+Overlay biasa                 : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\overlay_normal\semantic_mask_normal_overlay.png
+Bounding box overlay          : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\overlay_bbox\semantic_mask_bbox_overlay.png
+Semantic preview              : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\detail\semantic_mask_semantic_preview.png
+Instance preview              : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\detail\semantic_mask_instance_preview.png
+CSV detail                    : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\detail\semantic_mask_instances.csv
+Statistics JSON               : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\statistics\semantic_mask_statistics.json
+Full frame                    : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\full_frame\semantic_mask_full_frame.png

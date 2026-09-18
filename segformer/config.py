@@ -3,36 +3,25 @@ import torch
 
 
 # ============================================================
-# ROOT PROJECT
+# PROJECT PATH
 # ============================================================
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+SEGFORMER_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = SEGFORMER_DIR.parent
 
-
-# ============================================================
-# DATASET PARQUET
-# ============================================================
-
+# Dataset parquet untuk training
 DATASET_ROOT = PROJECT_ROOT / "tcd_dataset" / "data"
 
 TRAIN_PATTERN = "train-*.parquet"
 TEST_PATTERN = "test-*.parquet"
 
-
-# ============================================================
-# CITRA TIF UNTUK INFERENCE
-# ============================================================
-
-TIF_IMAGE_PATH = (
-    PROJECT_ROOT
-    / "tcd_dataset"
-    / "dataset"
-    / "713.tif"
-)
+# Dataset raster untuk prediction
+TIF_DATASET_DIR = PROJECT_ROOT / "tcd_dataset" / "dataset"
+TIF_PATTERN = "*.tif"
 
 
 # ============================================================
-# OUTPUT
+# MODEL CHECKPOINT
 # ============================================================
 
 CHECKPOINT_DIR = (
@@ -41,19 +30,87 @@ CHECKPOINT_DIR = (
     / "segformer_b5"
 )
 
-OUTPUT_DIR = PROJECT_ROOT / "outputs"
-
-SEMANTIC_OUTPUT_DIR = OUTPUT_DIR / "semantic_masks"
-INSTANCE_OUTPUT_DIR = OUTPUT_DIR / "instance_masks"
-OVERLAY_OUTPUT_DIR = OUTPUT_DIR / "overlays"
-METRICS_OUTPUT_DIR = OUTPUT_DIR / "metrics"
+BEST_MODEL_DIR = CHECKPOINT_DIR / "best_model"
 
 
 # ============================================================
-# MODEL
+# OUTPUT DIRECTORY
 # ============================================================
 
-MODEL_NAME = "nvidia/segformer-b5-finetuned-ade-640-640"
+SEGFORMER_OUTPUT_DIR = (
+    PROJECT_ROOT
+    / "outputs"
+    / "segformer"
+)
+
+# Hasil semantic mask
+SEMANTIC_OUTPUT_DIR = (
+    SEGFORMER_OUTPUT_DIR
+    / "semantic_masks"
+)
+
+# Hasil instance mask
+INSTANCE_OUTPUT_DIR = (
+    SEGFORMER_OUTPUT_DIR
+    / "instance_masks"
+)
+
+# Semua overlay
+OVERLAY_OUTPUT_DIR = (
+    SEGFORMER_OUTPUT_DIR
+    / "overlays"
+)
+
+# Overlay semantic
+SEMANTIC_OVERLAY_DIR = (
+    OVERLAY_OUTPUT_DIR
+    / "semantic"
+)
+
+# Overlay bounding box
+BBOX_OVERLAY_DIR = (
+    OVERLAY_OUTPUT_DIR
+    / "bbox"
+)
+
+# Preview detail
+DETAIL_OUTPUT_DIR = (
+    SEGFORMER_OUTPUT_DIR
+    / "detail"
+)
+
+# Preview sederhana
+PREVIEW_OUTPUT_DIR = (
+    SEGFORMER_OUTPUT_DIR
+    / "preview"
+)
+
+# Statistik
+STATISTICS_OUTPUT_DIR = (
+    SEGFORMER_OUTPUT_DIR
+    / "statistics"
+)
+
+# Evaluasi atau metrics
+METRICS_OUTPUT_DIR = (
+    SEGFORMER_OUTPUT_DIR
+    / "metrics"
+)
+
+# Combined frame
+COMBINED_OUTPUT_DIR = (
+    SEGFORMER_OUTPUT_DIR
+    / "combined"
+)
+
+
+# ============================================================
+# MODEL CONFIGURATION
+# ============================================================
+
+MODEL_NAME = (
+    "nvidia/segformer-b5-finetuned-ade-640-640"
+)
 
 NUM_CLASSES = 2
 
@@ -69,34 +126,50 @@ LABEL2ID = {
 
 
 # ============================================================
-# TRAINING
+# IMAGE CONFIGURATION
 # ============================================================
 
 IMAGE_SIZE = 512
 
-BATCH_SIZE = 1
+# Ukuran patch saat prediction
+PREDICT_PATCH_SIZE = IMAGE_SIZE
 
+# Overlap antar patch
+PREDICT_OVERLAP = 128
+
+# Batch patch saat prediction
+PREDICT_BATCH_SIZE = 1
+
+
+# ============================================================
+# TRAINING CONFIGURATION
+# ============================================================
+
+BATCH_SIZE = 1
 NUM_EPOCHS = 2
 
 LEARNING_RATE = 6e-5
-
 WEIGHT_DECAY = 1e-4
 
 VAL_RATIO = 0.2
-
 NUM_WORKERS = 0
-
 SEED = 42
 
 
 # ============================================================
-# INSTANCE SEGMENTATION
+# PREDICTION CONFIGURATION
 # ============================================================
 
+# True = semua file tif dalam TIF_DATASET_DIR
+PREDICT_ALL_TIF = True
+
+# Threshold probabilitas tree
 TREE_THRESHOLD = 0.5
 
+# Luas minimum objek instance
 MIN_INSTANCE_AREA = 20
 
+# Jarak minimum watershed
 WATERSHED_MIN_DISTANCE = 10
 
 
@@ -105,33 +178,55 @@ WATERSHED_MIN_DISTANCE = 10
 # ============================================================
 
 DEVICE = torch.device(
-    "cuda" if torch.cuda.is_available() else "cpu"
+    "cuda"
+    if torch.cuda.is_available()
+    else "cpu"
 )
 
 
+# ============================================================
+# CREATE DIRECTORIES
+# ============================================================
+
 def create_directories():
+    directories = [
+        CHECKPOINT_DIR,
+        BEST_MODEL_DIR,
 
-    CHECKPOINT_DIR.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
+        SEGFORMER_OUTPUT_DIR,
 
-    SEMANTIC_OUTPUT_DIR.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
+        SEMANTIC_OUTPUT_DIR,
+        INSTANCE_OUTPUT_DIR,
 
-    INSTANCE_OUTPUT_DIR.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
+        OVERLAY_OUTPUT_DIR,
+        SEMANTIC_OVERLAY_DIR,
+        BBOX_OVERLAY_DIR,
 
-    OVERLAY_OUTPUT_DIR.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
+        DETAIL_OUTPUT_DIR,
+        PREVIEW_OUTPUT_DIR,
 
-    METRICS_OUTPUT_DIR.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
+        STATISTICS_OUTPUT_DIR,
+        METRICS_OUTPUT_DIR,
+
+        COMBINED_OUTPUT_DIR,
+    ]
+
+    for directory in directories:
+        directory.mkdir(
+            parents=True,
+            exist_ok=True
+        )
+
+
+if __name__ == "__main__":
+    create_directories()
+
+    print("=" * 70)
+    print("SEMUA DIREKTORI SEGFORMER BERHASIL DIBUAT")
+    print("=" * 70)
+    print(f"Project root       : {PROJECT_ROOT}")
+    print(f"Dataset raster     : {TIF_DATASET_DIR}")
+    print(f"Checkpoint         : {BEST_MODEL_DIR}")
+    print(f"Output utama       : {SEGFORMER_OUTPUT_DIR}")
+    print(f"Combined output    : {COMBINED_OUTPUT_DIR}")
+    print(f"Device             : {DEVICE}")

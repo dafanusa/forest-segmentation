@@ -1,6 +1,7 @@
 from pathlib import Path
 import csv
 import gc
+import json
 
 import cv2
 import numpy as np
@@ -34,16 +35,18 @@ from config import (
 # KONFIGURASI FOLDER INPUT
 # ============================================================
 
-# GANTI PATH INI SESUAI LOKASI FOLDER .TIF ABANG
 INPUT_TIF_DIR = Path(
     r"D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\STRD-Net\tcd_dataset\dataset"
 )
 
-# Folder tambahan untuk menyimpan hasil detail
 DETAIL_OUTPUT_DIR = Path("outputs/detail")
 STATISTICS_OUTPUT_DIR = Path("outputs/statistics")
 
 MODEL_PATH = CHECKPOINT_DIR / "best_model"
+
+# Folder khusus dua jenis overlay
+SEMANTIC_OVERLAY_DIR = Path("outputs/overlay_semantic")
+BBOX_OVERLAY_DIR = Path("outputs/overlay_bbox")
 
 
 # ============================================================
@@ -79,6 +82,16 @@ def create_all_directories():
         exist_ok=True,
     )
 
+    SEMANTIC_OVERLAY_DIR.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    BBOX_OVERLAY_DIR.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
 
 # ============================================================
 # MEMBACA CITRA TIFF
@@ -87,7 +100,6 @@ def create_all_directories():
 def read_tif(path):
 
     with rasterio.open(path) as src:
-
         image = src.read()
 
     image = np.transpose(
@@ -103,11 +115,28 @@ def read_tif(path):
             axis=2,
         )
 
+    if image.shape[2] == 2:
+
+        image = np.concatenate(
+            [
+                image,
+                image[:, :, 1:2],
+            ],
+            axis=2,
+        )
+
     if image.shape[2] > 3:
 
         image = image[:, :, :3]
 
     image = image.astype(np.float32)
+
+    image = np.nan_to_num(
+        image,
+        nan=0.0,
+        posinf=0.0,
+        neginf=0.0,
+    )
 
     image_min = image.min()
     image_max = image.max()
@@ -130,11 +159,13 @@ def read_tif(path):
 def load_model():
 
     print("Memuat processor...")
+
     processor = SegformerImageProcessor.from_pretrained(
         MODEL_PATH
     )
 
     print("Memuat model...")
+
     model = SegformerForSemanticSegmentation.from_pretrained(
         MODEL_PATH
     )
@@ -142,7 +173,9 @@ def load_model():
     model.to(DEVICE)
     model.eval()
 
-    print(f"Model berhasil dimuat pada device: {DEVICE}")
+    print(
+        f"Model berhasil dimuat pada device: {DEVICE}"
+    )
 
     return processor, model
 
@@ -162,7 +195,9 @@ def predict_patch(
         return_tensors="pt",
     )
 
-    pixel_values = inputs["pixel_values"].to(DEVICE)
+    pixel_values = inputs[
+        "pixel_values"
+    ].to(DEVICE)
 
     with torch.no_grad():
 
@@ -211,12 +246,18 @@ def predict_sliding_window(
     height, width = image.shape[:2]
 
     prediction_sum = np.zeros(
-        (height, width),
+        (
+            height,
+            width,
+        ),
         dtype=np.float32,
     )
 
     prediction_count = np.zeros(
-        (height, width),
+        (
+            height,
+            width,
+        ),
         dtype=np.float32,
     )
 
@@ -228,9 +269,17 @@ def predict_sliding_window(
 
     current_patch = 0
 
-    for y in range(0, height, stride):
+    for y in range(
+        0,
+        height,
+        stride,
+    ):
 
-        for x in range(0, width, stride):
+        for x in range(
+            0,
+            width,
+            stride,
+        ):
 
             current_patch += 1
 
@@ -251,7 +300,10 @@ def predict_sliding_window(
 
             ph, pw = patch.shape[:2]
 
-            if ph != patch_size or pw != patch_size:
+            if (
+                ph != patch_size
+                or pw != patch_size
+            ):
 
                 padded = np.zeros(
                     (
@@ -262,7 +314,10 @@ def predict_sliding_window(
                     dtype=np.uint8,
                 )
 
-                padded[:ph, :pw] = patch
+                padded[
+                    :ph,
+                    :pw,
+                ] = patch
 
                 patch_input = padded
 
@@ -291,7 +346,10 @@ def predict_sliding_window(
                 x:x2,
             ] += 1
 
-            if current_patch % 20 == 0 or current_patch == total_patch:
+            if (
+                current_patch % 20 == 0
+                or current_patch == total_patch
+            ):
 
                 print(
                     f"  Patch {current_patch}/{total_patch}",
@@ -333,7 +391,10 @@ def semantic_to_instance(semantic_mask):
         binary_mask
     )
 
-    for label_id in range(1, num_labels):
+    for label_id in range(
+        1,
+        num_labels,
+    ):
 
         area = stats[
             label_id,
@@ -371,16 +432,24 @@ def semantic_to_instance(semantic_mask):
         dtype=np.int32,
     )
 
-    for idx, (row, col) in enumerate(
+    for idx, (
+        row,
+        col,
+    ) in enumerate(
         coordinates,
         start=1,
     ):
 
-        markers[row, col] = idx
+        markers[
+            row,
+            col,
+        ] = idx
 
     if len(coordinates) == 0:
 
-        markers[cleaned_mask > 0] = 1
+        markers[
+            cleaned_mask > 0
+        ] = 1
 
     else:
 
@@ -394,33 +463,26 @@ def semantic_to_instance(semantic_mask):
         mask=cleaned_mask,
     )
 
-    return instance_mask.astype(np.int32)
+    return instance_mask.astype(
+        np.int32
+    )
 
 
 # ============================================================
-# MEMBUAT OVERLAY DETAIL
+# MENGAMBIL DETAIL SETIAP INSTANCE
 # ============================================================
 
-def create_overlay(
-    image,
-    semantic_mask,
+def extract_instance_details(
     instance_mask,
 ):
 
-    overlay = image.copy()
+    instance_details = []
 
-    # Area pohon diberi warna hijau transparan
-    tree_area = semantic_mask > 0
+    unique_instances = np.unique(
+        instance_mask
+    )
 
-    overlay[tree_area] = (
-        0.5 * overlay[tree_area]
-        + 0.5 * np.array(
-            [0, 255, 0]
-        )
-    ).astype(np.uint8)
-
-    # Gambar boundary setiap instance/pohon
-    for instance_id in np.unique(instance_mask):
+    for instance_id in unique_instances:
 
         if instance_id == 0:
             continue
@@ -428,6 +490,349 @@ def create_overlay(
         binary = (
             instance_mask == instance_id
         ).astype(np.uint8)
+
+        area_pixels = int(
+            np.sum(binary)
+        )
+
+        if area_pixels <= 0:
+            continue
+
+        x, y, width, height = cv2.boundingRect(
+            binary
+        )
+
+        moments = cv2.moments(
+            binary
+        )
+
+        if moments["m00"] != 0:
+
+            centroid_x = (
+                moments["m10"]
+                / moments["m00"]
+            )
+
+            centroid_y = (
+                moments["m01"]
+                / moments["m00"]
+            )
+
+        else:
+
+            centroid_x = (
+                x + width / 2
+            )
+
+            centroid_y = (
+                y + height / 2
+            )
+
+        detail = {
+            "instance_id": int(
+                instance_id
+            ),
+            "tree_type": (
+                "Tree - jenis belum teridentifikasi"
+            ),
+            "area_pixels": area_pixels,
+            "bbox_x": int(x),
+            "bbox_y": int(y),
+            "bbox_width": int(width),
+            "bbox_height": int(height),
+            "bbox_x2": int(
+                x + width - 1
+            ),
+            "bbox_y2": int(
+                y + height - 1
+            ),
+            "centroid_x": round(
+                float(centroid_x),
+                2,
+            ),
+            "centroid_y": round(
+                float(centroid_y),
+                2,
+            ),
+        }
+
+        instance_details.append(
+            detail
+        )
+
+    return instance_details
+
+
+# ============================================================
+# FUNGSI TEKS DENGAN BACKGROUND
+# ============================================================
+
+def draw_text_with_background(
+    image,
+    text,
+    position,
+    font_scale=0.42,
+    text_color=(255, 255, 255),
+    background_color=(0, 0, 0),
+    thickness=1,
+    padding=4,
+):
+
+    x, y = position
+
+    font = cv2.FONT_HERSHEY_SIMPLEX
+
+    (
+        text_width,
+        text_height,
+    ), baseline = cv2.getTextSize(
+        text,
+        font,
+        font_scale,
+        thickness,
+    )
+
+    rect_x1 = max(
+        x - padding,
+        0,
+    )
+
+    rect_y1 = max(
+        y - text_height - padding,
+        0,
+    )
+
+    rect_x2 = min(
+        x + text_width + padding,
+        image.shape[1] - 1,
+    )
+
+    rect_y2 = min(
+        y + baseline + padding,
+        image.shape[0] - 1,
+    )
+
+    cv2.rectangle(
+        image,
+        (
+            rect_x1,
+            rect_y1,
+        ),
+        (
+            rect_x2,
+            rect_y2,
+        ),
+        background_color,
+        -1,
+    )
+
+    cv2.putText(
+        image,
+        text,
+        (
+            x,
+            y,
+        ),
+        font,
+        font_scale,
+        text_color,
+        thickness,
+        cv2.LINE_AA,
+    )
+
+
+# ============================================================
+# OVERLAY 1: HANYA AREA POHON DAN PERSENTASE
+# ============================================================
+
+def create_semantic_overlay(
+    image,
+    semantic_mask,
+    statistics,
+):
+
+    height, width = semantic_mask.shape
+
+    # Background hitam
+    overlay = np.zeros(
+        (
+            height,
+            width,
+            3,
+        ),
+        dtype=np.uint8,
+    )
+
+    # Area pohon hijau
+    overlay[
+        semantic_mask > 0
+    ] = [
+        0,
+        255,
+        0,
+    ]
+
+    # Panel informasi
+    panel_lines = [
+        "SEMANTIC TREE DETECTION",
+        (
+            f"Ukuran: "
+            f"{statistics['width']} x "
+            f"{statistics['height']} px"
+        ),
+        (
+            f"Tree: "
+            f"{statistics['tree_percentage']:.2f}%"
+        ),
+        (
+            f"Background: "
+            f"{statistics['background_percentage']:.2f}%"
+        ),
+        (
+            f"Piksel pohon: "
+            f"{statistics['tree_pixels']:,}"
+        ),
+        (
+            f"Piksel background: "
+            f"{statistics['background_pixels']:,}"
+        ),
+    ]
+
+    panel_x = 25
+    panel_y = 35
+
+    for line_index, line in enumerate(
+        panel_lines
+    ):
+
+        draw_text_with_background(
+            overlay,
+            line,
+            (
+                panel_x,
+                panel_y + line_index * 25,
+            ),
+            font_scale=(
+                0.55
+                if line_index == 0
+                else 0.45
+            ),
+            text_color=(
+                255,
+                255,
+                255,
+            ),
+            background_color=(
+                0,
+                0,
+                0,
+            ),
+            padding=3,
+        )
+
+    return overlay
+
+
+# ============================================================
+# OVERLAY 2:
+# CITRA ASLI + AREA HIJAU TRANSPARAN +
+# BOUNDARY MERAH + BOUNDING BOX MERAH +
+# CENTROID DI TENGAH POHON
+# ============================================================
+
+def create_bbox_overlay(
+    image,
+    semantic_mask,
+    instance_mask,
+):
+
+    # Pertahankan citra asli sebagai background
+    overlay = image.copy()
+
+    # --------------------------------------------------------
+    # Area pohon diberi warna hijau transparan
+    # --------------------------------------------------------
+
+    tree_area = semantic_mask > 0
+
+    green_color = np.array(
+        [
+            0,
+            255,
+            0,
+        ],
+        dtype=np.float32,
+    )
+
+    # Tingkat transparansi warna hijau
+    alpha = 0.35
+
+    overlay[tree_area] = (
+        (
+            1 - alpha
+        )
+        * overlay[tree_area].astype(np.float32)
+        + alpha * green_color
+    ).astype(np.uint8)
+
+    # --------------------------------------------------------
+    # Boundary, bounding box, dan centroid
+    # --------------------------------------------------------
+
+    unique_instances = np.unique(
+        instance_mask
+    )
+
+    for instance_id in unique_instances:
+
+        # Abaikan background
+        if instance_id == 0:
+            continue
+
+        # Mask untuk satu pohon
+        binary = (
+            instance_mask == instance_id
+        ).astype(np.uint8)
+
+        # ----------------------------------------------------
+        # Bounding box
+        # ----------------------------------------------------
+
+        x, y, width, height = cv2.boundingRect(
+            binary
+        )
+
+        x2 = x + width - 1
+        y2 = y + height - 1
+
+        # Warna merah dalam format RGB
+        red_color = (
+            255,
+            0,
+            0,
+        )
+
+        # ----------------------------------------------------
+        # Bounding box merah
+        # ----------------------------------------------------
+
+        cv2.rectangle(
+            overlay,
+            (
+                x,
+                y,
+            ),
+            (
+                x2,
+                y2,
+            ),
+            red_color,
+            2,
+        )
+
+        # ----------------------------------------------------
+        # Boundary/kontur merah
+        # ----------------------------------------------------
 
         contours, _ = cv2.findContours(
             binary,
@@ -439,8 +844,99 @@ def create_overlay(
             overlay,
             contours,
             -1,
-            (255, 0, 0),
+            red_color,
             2,
+        )
+
+        # ----------------------------------------------------
+        # Menghitung centroid tengah pohon
+        # ----------------------------------------------------
+
+        moments = cv2.moments(
+            binary
+        )
+
+        if moments["m00"] != 0:
+
+            centroid_x = int(
+                round(
+                    moments["m10"]
+                    / moments["m00"]
+                )
+            )
+
+            centroid_y = int(
+                round(
+                    moments["m01"]
+                    / moments["m00"]
+                )
+            )
+
+        else:
+
+            centroid_x = int(
+                round(
+                    x + width / 2
+                )
+            )
+
+            centroid_y = int(
+                round(
+                    y + height / 2
+                )
+            )
+
+        # Pastikan centroid berada di dalam ukuran citra
+        centroid_x = max(
+            0,
+            min(
+                centroid_x,
+                overlay.shape[1] - 1,
+            ),
+        )
+
+        centroid_y = max(
+            0,
+            min(
+                centroid_y,
+                overlay.shape[0] - 1,
+            ),
+        )
+
+        # ----------------------------------------------------
+        # Titik centroid
+        # Kuning sebagai penanda titik tengah pohon
+        # dengan outline merah agar tetap terlihat
+        # ----------------------------------------------------
+
+        cv2.circle(
+            overlay,
+            (
+                centroid_x,
+                centroid_y,
+            ),
+            7,
+            (
+                255,
+                0,
+                0,
+            ),
+            -1,
+        )
+
+        cv2.circle(
+            overlay,
+            (
+                centroid_x,
+                centroid_y,
+            ),
+            4,
+            (
+                255,
+                255,
+                0,
+            ),
+            -1,
         )
 
     return overlay
@@ -450,7 +946,9 @@ def create_overlay(
 # MEMBUAT PREVIEW SEMANTIC BERWARNA
 # ============================================================
 
-def create_semantic_preview(semantic_mask):
+def create_semantic_preview(
+    semantic_mask
+):
 
     preview = np.zeros(
         (
@@ -461,15 +959,17 @@ def create_semantic_preview(semantic_mask):
         dtype=np.uint8,
     )
 
-    # Background berwarna hitam
-    preview[semantic_mask == 0] = [
+    preview[
+        semantic_mask == 0
+    ] = [
         0,
         0,
         0,
     ]
 
-    # Area pohon berwarna hijau
-    preview[semantic_mask > 0] = [
+    preview[
+        semantic_mask > 0
+    ] = [
         0,
         255,
         0,
@@ -482,7 +982,9 @@ def create_semantic_preview(semantic_mask):
 # MEMBUAT PREVIEW INSTANCE BERWARNA
 # ============================================================
 
-def create_instance_preview(instance_mask):
+def create_instance_preview(
+    instance_mask
+):
 
     height, width = instance_mask.shape
 
@@ -576,7 +1078,9 @@ def calculate_statistics(
             )
         )
 
-        instance_areas.append(area)
+        instance_areas.append(
+            area
+        )
 
     if len(instance_areas) > 0:
 
@@ -604,21 +1108,91 @@ def calculate_statistics(
         median_instance_area = 0
 
     statistics = {
-        "height": height,
-        "width": width,
-        "total_pixels": total_pixels,
-        "tree_pixels": tree_pixels,
-        "background_pixels": background_pixels,
-        "tree_percentage": tree_percentage,
-        "background_percentage": background_percentage,
-        "instance_count": instance_count,
-        "min_instance_area_pixel": min_instance_area,
-        "max_instance_area_pixel": max_instance_area,
-        "mean_instance_area_pixel": mean_instance_area,
-        "median_instance_area_pixel": median_instance_area,
+        "height": int(height),
+        "width": int(width),
+        "total_pixels": int(total_pixels),
+        "tree_pixels": int(tree_pixels),
+        "background_pixels": int(background_pixels),
+        "tree_percentage": float(
+            tree_percentage
+        ),
+        "background_percentage": float(
+            background_percentage
+        ),
+        "instance_count": int(
+            instance_count
+        ),
+        "min_instance_area_pixel": int(
+            min_instance_area
+        ),
+        "max_instance_area_pixel": int(
+            max_instance_area
+        ),
+        "mean_instance_area_pixel": float(
+            mean_instance_area
+        ),
+        "median_instance_area_pixel": float(
+            median_instance_area
+        ),
+        "tree_type": (
+            "Tree - jenis belum teridentifikasi"
+        ),
     }
 
     return statistics
+
+
+# ============================================================
+# MENYIMPAN CSV DETAIL SETIAP INSTANCE
+# ============================================================
+
+def save_instance_details_csv(
+    instance_details,
+    output_path,
+):
+
+    output_path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    fieldnames = [
+        "instance_id",
+        "tree_type",
+        "area_pixels",
+        "bbox_x",
+        "bbox_y",
+        "bbox_x2",
+        "bbox_y2",
+        "bbox_width",
+        "bbox_height",
+        "centroid_x",
+        "centroid_y",
+    ]
+
+    with open(
+        output_path,
+        "w",
+        newline="",
+        encoding="utf-8-sig",
+    ) as file:
+
+        writer = csv.DictWriter(
+            file,
+            fieldnames=fieldnames,
+        )
+
+        writer.writeheader()
+
+        for detail in instance_details:
+
+            writer.writerow(
+                detail
+            )
+
+    print(
+        f"CSV detail instance: {output_path}"
+    )
 
 
 # ============================================================
@@ -628,11 +1202,14 @@ def calculate_statistics(
 def save_detail_report(
     image_path,
     statistics,
+    instance_details,
     semantic_path,
     instance_path,
-    overlay_path,
+    semantic_overlay_path,
+    bbox_overlay_path,
     semantic_preview_path,
     instance_preview_path,
+    instance_csv_path,
     report_path,
 ):
 
@@ -643,82 +1220,195 @@ def save_detail_report(
     ) as file:
 
         file.write("=" * 75 + "\n")
-        file.write("LAPORAN DETAIL HASIL INFERENCE SEGFORMER-B5\n")
+
+        file.write(
+            "LAPORAN DETAIL HASIL INFERENCE SEGFORMER-B5\n"
+        )
+
         file.write("=" * 75 + "\n\n")
 
         file.write("INFORMASI CITRA\n")
         file.write("-" * 75 + "\n")
-        file.write(f"Nama file       : {image_path.name}\n")
-        file.write(f"Lokasi input    : {image_path}\n")
+
+        file.write(
+            f"Nama file       : {image_path.name}\n"
+        )
+
+        file.write(
+            f"Lokasi input    : {image_path}\n"
+        )
+
         file.write(
             f"Ukuran citra    : "
             f"{statistics['width']} x "
             f"{statistics['height']} piksel\n"
         )
+
         file.write(
             f"Total piksel    : "
             f"{statistics['total_pixels']:,}\n"
         )
 
-        file.write("\nHASIL SEMANTIC SEGMENTATION\n")
+        file.write(
+            "\nHASIL SEMANTIC SEGMENTATION\n"
+        )
+
         file.write("-" * 75 + "\n")
+
         file.write(
             f"Piksel pohon    : "
             f"{statistics['tree_pixels']:,}\n"
         )
+
         file.write(
             f"Piksel background: "
             f"{statistics['background_pixels']:,}\n"
         )
+
         file.write(
             f"Persentase pohon: "
             f"{statistics['tree_percentage']:.4f}%\n"
         )
+
         file.write(
             f"Persentase background: "
             f"{statistics['background_percentage']:.4f}%\n"
         )
 
-        file.write("\nHASIL INSTANCE SEGMENTATION\n")
+        file.write(
+            "\nHASIL INSTANCE SEGMENTATION\n"
+        )
+
         file.write("-" * 75 + "\n")
+
         file.write(
             f"Jumlah instance : "
             f"{statistics['instance_count']:,}\n"
         )
+
         file.write(
             f"Luas instance minimum: "
             f"{statistics['min_instance_area_pixel']:,} piksel\n"
         )
+
         file.write(
             f"Luas instance maksimum: "
             f"{statistics['max_instance_area_pixel']:,} piksel\n"
         )
+
         file.write(
             f"Rata-rata luas instance: "
             f"{statistics['mean_instance_area_pixel']:.2f} piksel\n"
         )
+
         file.write(
             f"Median luas instance: "
             f"{statistics['median_instance_area_pixel']:.2f} piksel\n"
         )
 
+        file.write(
+            f"Jenis objek: "
+            f"{statistics['tree_type']}\n"
+        )
+
+        file.write(
+            "\nDETAIL SETIAP INSTANCE\n"
+        )
+
+        file.write("-" * 75 + "\n")
+
+        if len(instance_details) == 0:
+
+            file.write(
+                "Tidak ada instance pohon yang terdeteksi.\n"
+            )
+
+        else:
+
+            for detail in instance_details:
+
+                file.write(
+                    f"ID Instance       : "
+                    f"{detail['instance_id']}\n"
+                )
+
+                file.write(
+                    f"Jenis objek       : "
+                    f"{detail['tree_type']}\n"
+                )
+
+                file.write(
+                    f"Luas              : "
+                    f"{detail['area_pixels']:,} piksel\n"
+                )
+
+                file.write(
+                    f"Bounding box      : "
+                    f"({detail['bbox_x']}, "
+                    f"{detail['bbox_y']}) - "
+                    f"({detail['bbox_x2']}, "
+                    f"{detail['bbox_y2']})\n"
+                )
+
+                file.write(
+                    f"Ukuran bbox       : "
+                    f"{detail['bbox_width']} x "
+                    f"{detail['bbox_height']} piksel\n"
+                )
+
+                file.write(
+                    f"Centroid          : "
+                    f"({detail['centroid_x']}, "
+                    f"{detail['centroid_y']})\n"
+                )
+
+                file.write("-" * 75 + "\n")
+
         file.write("\nFILE OUTPUT\n")
         file.write("-" * 75 + "\n")
-        file.write(f"Semantic mask       : {semantic_path}\n")
-        file.write(f"Instance mask       : {instance_path}\n")
-        file.write(f"Overlay             : {overlay_path}\n")
+
+        file.write(
+            f"Semantic mask       : {semantic_path}\n"
+        )
+
+        file.write(
+            f"Instance mask       : {instance_path}\n"
+        )
+
+        file.write(
+            f"Overlay semantic    : {semantic_overlay_path}\n"
+        )
+
+        file.write(
+            f"Overlay bounding box: {bbox_overlay_path}\n"
+        )
+
         file.write(
             f"Semantic preview    : "
             f"{semantic_preview_path}\n"
         )
+
         file.write(
             f"Instance preview    : "
             f"{instance_preview_path}\n"
         )
 
-        file.write("\n" + "=" * 75 + "\n")
-        file.write("SELESAI\n")
-        file.write("=" * 75 + "\n")
+        file.write(
+            f"CSV detail instance : "
+            f"{instance_csv_path}\n"
+        )
+
+        file.write(
+            "\n" + "=" * 75 + "\n"
+        )
+
+        file.write(
+            "SELESAI\n"
+        )
+
+        file.write(
+            "=" * 75 + "\n"
+        )
 
 
 # ============================================================
@@ -741,7 +1431,7 @@ def save_statistics_csv(
         output_path,
         "w",
         newline="",
-        encoding="utf-8",
+        encoding="utf-8-sig",
     ) as file:
 
         writer = csv.DictWriter(
@@ -751,6 +1441,29 @@ def save_statistics_csv(
 
         writer.writeheader()
         writer.writerows(rows)
+
+
+# ============================================================
+# MENYIMPAN STATISTIK JSON
+# ============================================================
+
+def save_statistics_json(
+    statistics,
+    output_path,
+):
+
+    with open(
+        output_path,
+        "w",
+        encoding="utf-8",
+    ) as file:
+
+        json.dump(
+            statistics,
+            file,
+            indent=4,
+            ensure_ascii=False,
+        )
 
 
 # ============================================================
@@ -764,12 +1477,17 @@ def main():
     if not INPUT_TIF_DIR.exists():
 
         raise FileNotFoundError(
-            f"Folder input tidak ditemukan: {INPUT_TIF_DIR}"
+            f"Folder input tidak ditemukan: "
+            f"{INPUT_TIF_DIR}"
         )
 
     image_paths = sorted(
-        list(INPUT_TIF_DIR.glob("*.tif")) +
-        list(INPUT_TIF_DIR.glob("*.tiff"))
+        list(
+            INPUT_TIF_DIR.glob("*.tif")
+        )
+        + list(
+            INPUT_TIF_DIR.glob("*.tiff")
+        )
     )
 
     if len(image_paths) == 0:
@@ -784,10 +1502,23 @@ def main():
     print("=" * 75)
     print("BATCH INFERENCE SEGFORMER-B5")
     print("=" * 75)
-    print(f"Folder input : {INPUT_TIF_DIR}")
-    print(f"Jumlah citra : {len(image_paths)}")
-    print(f"Model        : {MODEL_PATH}")
-    print(f"Device       : {DEVICE}")
+
+    print(
+        f"Folder input : {INPUT_TIF_DIR}"
+    )
+
+    print(
+        f"Jumlah citra : {len(image_paths)}"
+    )
+
+    print(
+        f"Model        : {MODEL_PATH}"
+    )
+
+    print(
+        f"Device       : {DEVICE}"
+    )
+
     print("=" * 75)
 
     all_statistics = []
@@ -802,13 +1533,19 @@ def main():
 
         print()
         print("-" * 75)
+
         print(
             f"[{index}/{len(image_paths)}] "
             f"Memproses {image_path.name}"
         )
+
         print("-" * 75)
 
         try:
+
+            # ------------------------------------------------
+            # Baca citra
+            # ------------------------------------------------
 
             image = read_tif(
                 image_path
@@ -820,6 +1557,10 @@ def main():
                 f"{image.shape[0]}"
             )
 
+            # ------------------------------------------------
+            # Prediksi semantic segmentation
+            # ------------------------------------------------
+
             semantic_mask = predict_sliding_window(
                 image,
                 processor,
@@ -828,29 +1569,73 @@ def main():
                 stride=384,
             )
 
+            # ------------------------------------------------
+            # Konversi semantic ke instance
+            # ------------------------------------------------
+
             instance_mask = semantic_to_instance(
                 semantic_mask
             )
 
-            overlay = create_overlay(
-                image,
-                semantic_mask,
-                instance_mask,
+            # ------------------------------------------------
+            # Ambil detail setiap instance
+            # ------------------------------------------------
+
+            instance_details = (
+                extract_instance_details(
+                    instance_mask
+                )
             )
 
-            semantic_preview = create_semantic_preview(
-                semantic_mask
-            )
-
-            instance_preview = create_instance_preview(
-                instance_mask
-            )
+            # ------------------------------------------------
+            # Buat statistik
+            # ------------------------------------------------
 
             statistics = calculate_statistics(
                 image,
                 semantic_mask,
                 instance_mask,
             )
+
+            # ------------------------------------------------
+            # Buat dua overlay
+            # ------------------------------------------------
+
+            # Overlay semantic tetap dipertahankan
+            semantic_overlay = create_semantic_overlay(
+                image,
+                semantic_mask,
+                statistics,
+            )
+
+            # Overlay utama:
+            # citra asli + hijau transparan +
+            # boundary merah + bbox merah + centroid
+            bbox_overlay = create_bbox_overlay(
+                image,
+                semantic_mask,
+                instance_mask,
+            )
+
+            # ------------------------------------------------
+            # Buat preview
+            # ------------------------------------------------
+
+            semantic_preview = (
+                create_semantic_preview(
+                    semantic_mask
+                )
+            )
+
+            instance_preview = (
+                create_instance_preview(
+                    instance_mask
+                )
+            )
+
+            # ------------------------------------------------
+            # Path output
+            # ------------------------------------------------
 
             stem = image_path.stem
 
@@ -864,9 +1649,14 @@ def main():
                 / f"{stem}_instance.tif"
             )
 
-            overlay_path = (
-                OVERLAY_OUTPUT_DIR
-                / f"{stem}_overlay.png"
+            semantic_overlay_path = (
+                SEMANTIC_OVERLAY_DIR
+                / f"{stem}_semantic_only.png"
+            )
+
+            bbox_overlay_path = (
+                BBOX_OVERLAY_DIR
+                / f"{stem}_bounding_box.png"
             )
 
             semantic_preview_path = (
@@ -879,32 +1669,70 @@ def main():
                 / f"{stem}_instance_preview.png"
             )
 
+            instance_csv_path = (
+                DETAIL_OUTPUT_DIR
+                / f"{stem}_instances.csv"
+            )
+
             report_path = (
                 DETAIL_OUTPUT_DIR
                 / f"{stem}_report.txt"
             )
 
+            statistics_json_path = (
+                STATISTICS_OUTPUT_DIR
+                / f"{stem}_statistics.json"
+            )
+
+            # ------------------------------------------------
+            # Simpan semantic mask
+            # ------------------------------------------------
+
             cv2.imwrite(
                 str(semantic_path),
-                (semantic_mask * 255).astype(
-                    np.uint8
-                ),
+                (
+                    semantic_mask * 255
+                ).astype(np.uint8),
             )
+
+            # ------------------------------------------------
+            # Simpan instance mask
+            # ------------------------------------------------
 
             cv2.imwrite(
                 str(instance_path),
                 instance_mask.astype(
                     np.int32
                 ),
-        )
+            )
+
+            # ------------------------------------------------
+            # Simpan overlay semantic
+            # ------------------------------------------------
 
             cv2.imwrite(
-                str(overlay_path),
+                str(semantic_overlay_path),
                 cv2.cvtColor(
-                    overlay,
+                    semantic_overlay,
                     cv2.COLOR_RGB2BGR,
                 ),
             )
+
+            # ------------------------------------------------
+            # Simpan overlay utama
+            # ------------------------------------------------
+
+            cv2.imwrite(
+                str(bbox_overlay_path),
+                cv2.cvtColor(
+                    bbox_overlay,
+                    cv2.COLOR_RGB2BGR,
+                ),
+            )
+
+            # ------------------------------------------------
+            # Simpan semantic preview
+            # ------------------------------------------------
 
             cv2.imwrite(
                 str(semantic_preview_path),
@@ -914,6 +1742,10 @@ def main():
                 ),
             )
 
+            # ------------------------------------------------
+            # Simpan instance preview
+            # ------------------------------------------------
+
             cv2.imwrite(
                 str(instance_preview_path),
                 cv2.cvtColor(
@@ -922,16 +1754,45 @@ def main():
                 ),
             )
 
+            # ------------------------------------------------
+            # Simpan CSV detail instance
+            # ------------------------------------------------
+
+            save_instance_details_csv(
+                instance_details,
+                instance_csv_path,
+            )
+
+            # ------------------------------------------------
+            # Simpan laporan TXT
+            # ------------------------------------------------
+
             save_detail_report(
                 image_path,
                 statistics,
+                instance_details,
                 semantic_path,
                 instance_path,
-                overlay_path,
+                semantic_overlay_path,
+                bbox_overlay_path,
                 semantic_preview_path,
                 instance_preview_path,
+                instance_csv_path,
                 report_path,
             )
+
+            # ------------------------------------------------
+            # Simpan statistik JSON
+            # ------------------------------------------------
+
+            save_statistics_json(
+                statistics,
+                statistics_json_path,
+            )
+
+            # ------------------------------------------------
+            # Rekap statistik
+            # ------------------------------------------------
 
             row = {
                 "file": image_path.name,
@@ -939,16 +1800,24 @@ def main():
                 "height": statistics["height"],
                 "total_pixels": statistics["total_pixels"],
                 "tree_pixels": statistics["tree_pixels"],
-                "background_pixels": statistics["background_pixels"],
+                "background_pixels": statistics[
+                    "background_pixels"
+                ],
                 "tree_percentage": round(
-                    statistics["tree_percentage"],
+                    statistics[
+                        "tree_percentage"
+                    ],
                     4,
                 ),
                 "background_percentage": round(
-                    statistics["background_percentage"],
+                    statistics[
+                        "background_percentage"
+                    ],
                     4,
                 ),
-                "instance_count": statistics["instance_count"],
+                "instance_count": statistics[
+                    "instance_count"
+                ],
                 "min_instance_area_pixel": statistics[
                     "min_instance_area_pixel"
                 ],
@@ -967,55 +1836,112 @@ def main():
                     ],
                     2,
                 ),
+                "tree_type": statistics[
+                    "tree_type"
+                ],
             }
 
-            all_statistics.append(row)
+            all_statistics.append(
+                row
+            )
+
+            # ------------------------------------------------
+            # Tampilkan hasil
+            # ------------------------------------------------
 
             print("\nHASIL PREDIKSI")
+
             print(
                 f"Persentase pohon : "
                 f"{statistics['tree_percentage']:.2f}%"
             )
+
             print(
                 f"Persentase background : "
                 f"{statistics['background_percentage']:.2f}%"
             )
+
             print(
                 f"Jumlah instance/pohon : "
                 f"{statistics['instance_count']}"
             )
+
             print(
                 f"Rata-rata luas instance : "
                 f"{statistics['mean_instance_area_pixel']:.2f} piksel"
             )
 
-            print("\nOutput:")
-            print(f"  Semantic          : {semantic_path}")
-            print(f"  Instance          : {instance_path}")
-            print(f"  Overlay           : {overlay_path}")
             print(
-                f"  Semantic preview  : "
+                f"Jenis objek : "
+                f"{statistics['tree_type']}"
+            )
+
+            print("\nOutput:")
+
+            print(
+                f"  Semantic mask       : "
+                f"{semantic_path}"
+            )
+
+            print(
+                f"  Instance mask       : "
+                f"{instance_path}"
+            )
+
+            print(
+                f"  Overlay semantic    : "
+                f"{semantic_overlay_path}"
+            )
+
+            print(
+                f"  Overlay bounding box: "
+                f"{bbox_overlay_path}"
+            )
+
+            print(
+                f"  Semantic preview    : "
                 f"{semantic_preview_path}"
             )
+
             print(
-                f"  Instance preview  : "
+                f"  Instance preview    : "
                 f"{instance_preview_path}"
             )
-            print(f"  Report            : {report_path}")
+
+            print(
+                f"  CSV detail          : "
+                f"{instance_csv_path}"
+            )
+
+            print(
+                f"  Report              : "
+                f"{report_path}"
+            )
+
+            print(
+                f"  Statistik JSON      : "
+                f"{statistics_json_path}"
+            )
 
             berhasil += 1
 
-            # Bersihkan memori setiap selesai satu citra
+            # ------------------------------------------------
+            # Bersihkan memori
+            # ------------------------------------------------
+
             del image
             del semantic_mask
             del instance_mask
-            del overlay
+            del instance_details
+            del semantic_overlay
+            del bbox_overlay
             del semantic_preview
             del instance_preview
 
             gc.collect()
 
             if torch.cuda.is_available():
+
                 torch.cuda.empty_cache()
 
         except Exception as e:
@@ -1023,11 +1949,18 @@ def main():
             gagal += 1
 
             print(
-                f"GAGAL memproses {image_path.name}"
+                f"GAGAL memproses "
+                f"{image_path.name}"
             )
-            print(f"Error: {e}")
 
-    # Simpan rekap seluruh citra
+            print(
+                f"Error: {e}"
+            )
+
+    # ========================================================
+    # SIMPAN REKAP SELURUH CITRA
+    # ========================================================
+
     summary_csv_path = (
         STATISTICS_OUTPUT_DIR
         / "summary_inference.csv"
@@ -1042,10 +1975,23 @@ def main():
     print("=" * 75)
     print("BATCH INFERENCE SELESAI")
     print("=" * 75)
-    print(f"Berhasil       : {berhasil}")
-    print(f"Gagal          : {gagal}")
-    print(f"Total citra    : {len(image_paths)}")
-    print(f"Rekap CSV      : {summary_csv_path}")
+
+    print(
+        f"Berhasil       : {berhasil}"
+    )
+
+    print(
+        f"Gagal          : {gagal}"
+    )
+
+    print(
+        f"Total citra    : {len(image_paths)}"
+    )
+
+    print(
+        f"Rekap CSV      : {summary_csv_path}"
+    )
+
     print("=" * 75)
 
 

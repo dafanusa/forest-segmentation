@@ -1,0 +1,708 @@
+==========================================================================================
+LAPORAN DETAIL INFERENCE UPERNET
+==========================================================================================
+
+INFORMASI CITRA
+------------------------------------------------------------------------------------------
+Nama file        : 1212.tif
+Lokasi input     : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\tcd_dataset\dataset\1212.tif
+Ukuran citra     : 2048 x 2048 piksel
+Total piksel     : 4,194,304
+
+HASIL SEMANTIC SEGMENTATION
+------------------------------------------------------------------------------------------
+Piksel pohon     : 696,007
+Piksel background: 3,498,297
+Persentase pohon : 16.5941%
+Persentase background: 83.4059%
+
+HASIL INSTANCE SEGMENTATION
+------------------------------------------------------------------------------------------
+Jumlah instance  : 111
+Luas minimum     : 67 piksel
+Luas maksimum    : 131,192 piksel
+Rata-rata luas   : 6213.23 piksel
+Median luas      : 1266.00 piksel
+Jenis objek      : Tree - jenis belum teridentifikasi
+
+DETAIL INSTANCE
+------------------------------------------------------------------------------------------
+Instance ID    : 1
+Luas           : 249 piksel
+Bounding box   : (1069, 6) - (1083, 29)
+Ukuran bbox    : 15 x 24 piksel
+Centroid       : (1075.67, 16.77)
+------------------------------------------------------------------------------------------
+Instance ID    : 2
+Luas           : 169 piksel
+Bounding box   : (1666, 16) - (1680, 29)
+Ukuran bbox    : 15 x 14 piksel
+Centroid       : (1672.49, 22.42)
+------------------------------------------------------------------------------------------
+Instance ID    : 3
+Luas           : 2,551 piksel
+Bounding box   : (788, 21) - (831, 105)
+Ukuran bbox    : 44 x 85 piksel
+Centroid       : (810.02, 65.73)
+------------------------------------------------------------------------------------------
+Instance ID    : 4
+Luas           : 9,657 piksel
+Bounding box   : (0, 46) - (71, 257)
+Ukuran bbox    : 72 x 212 piksel
+Centroid       : (27.37, 137.87)
+------------------------------------------------------------------------------------------
+Instance ID    : 5
+Luas           : 651 piksel
+Bounding box   : (332, 126) - (365, 157)
+Ukuran bbox    : 34 x 32 piksel
+Centroid       : (346.9, 142.14)
+------------------------------------------------------------------------------------------
+Instance ID    : 6
+Luas           : 9,198 piksel
+Bounding box   : (1596, 141) - (1724, 249)
+Ukuran bbox    : 129 x 109 piksel
+Centroid       : (1665.77, 203.9)
+------------------------------------------------------------------------------------------
+Instance ID    : 7
+Luas           : 2,951 piksel
+Bounding box   : (19, 180) - (75, 258)
+Ukuran bbox    : 57 x 79 piksel
+Centroid       : (44.33, 219.51)
+------------------------------------------------------------------------------------------
+Instance ID    : 8
+Luas           : 31,828 piksel
+Bounding box   : (1393, 112) - (1621, 383)
+Ukuran bbox    : 229 x 272 piksel
+Centroid       : (1496.36, 222.12)
+------------------------------------------------------------------------------------------
+Instance ID    : 9
+Luas           : 652 piksel
+Bounding box   : (879, 223) - (922, 247)
+Ukuran bbox    : 44 x 25 piksel
+Centroid       : (899.38, 233.98)
+------------------------------------------------------------------------------------------
+Instance ID    : 10
+Luas           : 480 piksel
+Bounding box   : (929, 234) - (951, 265)
+Ukuran bbox    : 23 x 32 piksel
+Centroid       : (940.41, 248.38)
+------------------------------------------------------------------------------------------
+Instance ID    : 11
+Luas           : 10,594 piksel
+Bounding box   : (1725, 181) - (1854, 300)
+Ukuran bbox    : 130 x 120 piksel
+Centroid       : (1784.76, 243.26)
+------------------------------------------------------------------------------------------
+Instance ID    : 12
+Luas           : 277 piksel
+Bounding box   : (990, 257) - (1022, 270)
+Ukuran bbox    : 33 x 14 piksel
+Centroid       : (1007.27, 263.11)
+------------------------------------------------------------------------------------------
+Instance ID    : 13
+Luas           : 25,995 piksel
+Bounding box   : (1854, 173) - (2047, 354)
+Ukuran bbox    : 194 x 182 piksel
+Centroid       : (1955.37, 267.22)
+------------------------------------------------------------------------------------------
+Instance ID    : 14
+Luas           : 2,698 piksel
+Bounding box   : (928, 256) - (989, 331)
+Ukuran bbox    : 62 x 76 piksel
+Centroid       : (958.11, 294.98)
+------------------------------------------------------------------------------------------
+Instance ID    : 15
+Luas           : 1,335 piksel
+Bounding box   : (1724, 374) - (1765, 430)
+Ukuran bbox    : 42 x 57 piksel
+Centroid       : (1742.61, 402.42)
+------------------------------------------------------------------------------------------
+Instance ID    : 16
+Luas           : 202 piksel
+Bounding box   : (536, 434) - (554, 447)
+Ukuran bbox    : 19 x 14 piksel
+Centroid       : (545.24, 440.87)
+------------------------------------------------------------------------------------------
+Instance ID    : 17
+Luas           : 191 piksel
+Bounding box   : (744, 459) - (756, 477)
+Ukuran bbox    : 13 x 19 piksel
+Centroid       : (749.3, 467.24)
+------------------------------------------------------------------------------------------
+Instance ID    : 18
+Luas           : 66,837 piksel
+Bounding box   : (1706, 344) - (2047, 666)
+Ukuran bbox    : 342 x 323 piksel
+Centroid       : (1902.83, 496.14)
+------------------------------------------------------------------------------------------
+Instance ID    : 19
+Luas           : 3,416 piksel
+Bounding box   : (554, 426) - (616, 517)
+Ukuran bbox    : 63 x 92 piksel
+Centroid       : (586.01, 474.42)
+------------------------------------------------------------------------------------------
+Instance ID    : 20
+Luas           : 247 piksel
+Bounding box   : (673, 504) - (694, 519)
+Ukuran bbox    : 22 x 16 piksel
+Centroid       : (684.91, 512.05)
+------------------------------------------------------------------------------------------
+Instance ID    : 21
+Luas           : 2,137 piksel
+Bounding box   : (592, 488) - (654, 537)
+Ukuran bbox    : 63 x 50 piksel
+Centroid       : (623.73, 513.91)
+------------------------------------------------------------------------------------------
+Instance ID    : 22
+Luas           : 1,451 piksel
+Bounding box   : (1692, 522) - (1739, 585)
+Ukuran bbox    : 48 x 64 piksel
+Centroid       : (1716.04, 552.82)
+------------------------------------------------------------------------------------------
+Instance ID    : 23
+Luas           : 866 piksel
+Bounding box   : (1438, 586) - (1473, 621)
+Ukuran bbox    : 36 x 36 piksel
+Centroid       : (1453.88, 601.39)
+------------------------------------------------------------------------------------------
+Instance ID    : 24
+Luas           : 4,959 piksel
+Bounding box   : (1727, 556) - (1800, 658)
+Ukuran bbox    : 74 x 103 piksel
+Centroid       : (1764.77, 605.76)
+------------------------------------------------------------------------------------------
+Instance ID    : 25
+Luas           : 1,266 piksel
+Bounding box   : (1675, 584) - (1716, 632)
+Ukuran bbox    : 42 x 49 piksel
+Centroid       : (1698.14, 608.2)
+------------------------------------------------------------------------------------------
+Instance ID    : 26
+Luas           : 4,793 piksel
+Bounding box   : (1787, 566) - (1846, 665)
+Ukuran bbox    : 60 x 100 piksel
+Centroid       : (1819.09, 618.85)
+------------------------------------------------------------------------------------------
+Instance ID    : 27
+Luas           : 1,938 piksel
+Bounding box   : (1436, 628) - (1486, 695)
+Ukuran bbox    : 51 x 68 piksel
+Centroid       : (1458.69, 658.0)
+------------------------------------------------------------------------------------------
+Instance ID    : 28
+Luas           : 1,276 piksel
+Bounding box   : (1983, 636) - (2035, 678)
+Ukuran bbox    : 53 x 43 piksel
+Centroid       : (2005.71, 655.12)
+------------------------------------------------------------------------------------------
+Instance ID    : 29
+Luas           : 348 piksel
+Bounding box   : (1022, 638) - (1042, 662)
+Ukuran bbox    : 21 x 25 piksel
+Centroid       : (1030.9, 651.74)
+------------------------------------------------------------------------------------------
+Instance ID    : 30
+Luas           : 409 piksel
+Bounding box   : (1672, 663) - (1689, 694)
+Ukuran bbox    : 18 x 32 piksel
+Centroid       : (1680.22, 677.96)
+------------------------------------------------------------------------------------------
+Instance ID    : 31
+Luas           : 26,650 piksel
+Bounding box   : (1725, 651) - (1956, 863)
+Ukuran bbox    : 232 x 213 piksel
+Centroid       : (1814.89, 749.02)
+------------------------------------------------------------------------------------------
+Instance ID    : 32
+Luas           : 720 piksel
+Bounding box   : (1442, 747) - (1475, 785)
+Ukuran bbox    : 34 x 39 piksel
+Centroid       : (1459.52, 763.61)
+------------------------------------------------------------------------------------------
+Instance ID    : 33
+Luas           : 327 piksel
+Bounding box   : (1960, 760) - (1989, 778)
+Ukuran bbox    : 30 x 19 piksel
+Centroid       : (1974.48, 769.94)
+------------------------------------------------------------------------------------------
+Instance ID    : 34
+Luas           : 117 piksel
+Bounding box   : (1264, 781) - (1277, 792)
+Ukuran bbox    : 14 x 12 piksel
+Centroid       : (1270.9, 786.13)
+------------------------------------------------------------------------------------------
+Instance ID    : 35
+Luas           : 608 piksel
+Bounding box   : (1875, 777) - (1911, 807)
+Ukuran bbox    : 37 x 31 piksel
+Centroid       : (1891.58, 790.7)
+------------------------------------------------------------------------------------------
+Instance ID    : 36
+Luas           : 420 piksel
+Bounding box   : (1557, 814) - (1581, 836)
+Ukuran bbox    : 25 x 23 piksel
+Centroid       : (1569.65, 824.16)
+------------------------------------------------------------------------------------------
+Instance ID    : 37
+Luas           : 328 piksel
+Bounding box   : (1702, 842) - (1722, 862)
+Ukuran bbox    : 21 x 21 piksel
+Centroid       : (1712.21, 851.66)
+------------------------------------------------------------------------------------------
+Instance ID    : 38
+Luas           : 301 piksel
+Bounding box   : (1710, 879) - (1735, 896)
+Ukuran bbox    : 26 x 18 piksel
+Centroid       : (1721.07, 886.22)
+------------------------------------------------------------------------------------------
+Instance ID    : 39
+Luas           : 2,083 piksel
+Bounding box   : (1295, 871) - (1359, 931)
+Ukuran bbox    : 65 x 61 piksel
+Centroid       : (1322.57, 899.2)
+------------------------------------------------------------------------------------------
+Instance ID    : 40
+Luas           : 889 piksel
+Bounding box   : (1633, 888) - (1670, 930)
+Ukuran bbox    : 38 x 43 piksel
+Centroid       : (1651.76, 909.05)
+------------------------------------------------------------------------------------------
+Instance ID    : 41
+Luas           : 416 piksel
+Bounding box   : (1578, 902) - (1611, 921)
+Ukuran bbox    : 34 x 20 piksel
+Centroid       : (1594.46, 911.45)
+------------------------------------------------------------------------------------------
+Instance ID    : 42
+Luas           : 131,192 piksel
+Bounding box   : (870, 730) - (1334, 1144)
+Ukuran bbox    : 465 x 415 piksel
+Centroid       : (1072.35, 920.58)
+------------------------------------------------------------------------------------------
+Instance ID    : 43
+Luas           : 221 piksel
+Bounding box   : (1744, 920) - (1757, 941)
+Ukuran bbox    : 14 x 22 piksel
+Centroid       : (1749.71, 929.78)
+------------------------------------------------------------------------------------------
+Instance ID    : 44
+Luas           : 1,971 piksel
+Bounding box   : (1313, 896) - (1377, 951)
+Ukuran bbox    : 65 x 56 piksel
+Centroid       : (1346.46, 925.64)
+------------------------------------------------------------------------------------------
+Instance ID    : 45
+Luas           : 444 piksel
+Bounding box   : (501, 921) - (522, 948)
+Ukuran bbox    : 22 x 28 piksel
+Centroid       : (511.41, 936.13)
+------------------------------------------------------------------------------------------
+Instance ID    : 46
+Luas           : 7,255 piksel
+Bounding box   : (1342, 928) - (1454, 1033)
+Ukuran bbox    : 113 x 106 piksel
+Centroid       : (1391.96, 987.28)
+------------------------------------------------------------------------------------------
+Instance ID    : 47
+Luas           : 5,889 piksel
+Bounding box   : (1243, 925) - (1347, 1040)
+Ukuran bbox    : 105 x 116 piksel
+Centroid       : (1308.85, 990.32)
+------------------------------------------------------------------------------------------
+Instance ID    : 48
+Luas           : 5,563 piksel
+Bounding box   : (1972, 899) - (2047, 1035)
+Ukuran bbox    : 76 x 137 piksel
+Centroid       : (2017.79, 979.46)
+------------------------------------------------------------------------------------------
+Instance ID    : 49
+Luas           : 1,209 piksel
+Bounding box   : (1418, 1027) - (1466, 1066)
+Ukuran bbox    : 49 x 40 piksel
+Centroid       : (1439.71, 1043.94)
+------------------------------------------------------------------------------------------
+Instance ID    : 50
+Luas           : 1,316 piksel
+Bounding box   : (1965, 1046) - (2030, 1082)
+Ukuran bbox    : 66 x 37 piksel
+Centroid       : (1989.29, 1063.66)
+------------------------------------------------------------------------------------------
+Instance ID    : 51
+Luas           : 2,481 piksel
+Bounding box   : (1729, 1028) - (1786, 1094)
+Ukuran bbox    : 58 x 67 piksel
+Centroid       : (1760.74, 1064.05)
+------------------------------------------------------------------------------------------
+Instance ID    : 52
+Luas           : 2,273 piksel
+Bounding box   : (1989, 1072) - (2047, 1134)
+Ukuran bbox    : 59 x 63 piksel
+Centroid       : (2023.37, 1105.27)
+------------------------------------------------------------------------------------------
+Instance ID    : 53
+Luas           : 3,407 piksel
+Bounding box   : (1074, 1087) - (1166, 1138)
+Ukuran bbox    : 93 x 52 piksel
+Centroid       : (1119.2, 1115.62)
+------------------------------------------------------------------------------------------
+Instance ID    : 54
+Luas           : 21,149 piksel
+Bounding box   : (1783, 1019) - (1964, 1191)
+Ukuran bbox    : 182 x 173 piksel
+Centroid       : (1870.95, 1106.78)
+------------------------------------------------------------------------------------------
+Instance ID    : 55
+Luas           : 1,255 piksel
+Bounding box   : (736, 1097) - (781, 1146)
+Ukuran bbox    : 46 x 50 piksel
+Centroid       : (756.41, 1119.61)
+------------------------------------------------------------------------------------------
+Instance ID    : 56
+Luas           : 28,276 piksel
+Bounding box   : (741, 1026) - (966, 1254)
+Ukuran bbox    : 226 x 229 piksel
+Centroid       : (854.68, 1151.14)
+------------------------------------------------------------------------------------------
+Instance ID    : 57
+Luas           : 1,402 piksel
+Bounding box   : (673, 1127) - (726, 1174)
+Ukuran bbox    : 54 x 48 piksel
+Centroid       : (701.03, 1149.5)
+------------------------------------------------------------------------------------------
+Instance ID    : 58
+Luas           : 2,533 piksel
+Bounding box   : (1073, 1138) - (1144, 1176)
+Ukuran bbox    : 72 x 39 piksel
+Centroid       : (1109.39, 1156.84)
+------------------------------------------------------------------------------------------
+Instance ID    : 59
+Luas           : 17,479 piksel
+Bounding box   : (1646, 1095) - (1795, 1281)
+Ukuran bbox    : 150 x 187 piksel
+Centroid       : (1718.01, 1173.51)
+------------------------------------------------------------------------------------------
+Instance ID    : 60
+Luas           : 4,737 piksel
+Bounding box   : (1048, 1170) - (1142, 1241)
+Ukuran bbox    : 95 x 72 piksel
+Centroid       : (1098.68, 1204.32)
+------------------------------------------------------------------------------------------
+Instance ID    : 61
+Luas           : 3,039 piksel
+Bounding box   : (1046, 1211) - (1113, 1279)
+Ukuran bbox    : 68 x 69 piksel
+Centroid       : (1079.52, 1251.11)
+------------------------------------------------------------------------------------------
+Instance ID    : 62
+Luas           : 8,544 piksel
+Bounding box   : (641, 1189) - (755, 1315)
+Ukuran bbox    : 115 x 127 piksel
+Centroid       : (699.23, 1246.91)
+------------------------------------------------------------------------------------------
+Instance ID    : 63
+Luas           : 340 piksel
+Bounding box   : (1608, 1248) - (1634, 1276)
+Ukuran bbox    : 27 x 29 piksel
+Centroid       : (1618.45, 1261.7)
+------------------------------------------------------------------------------------------
+Instance ID    : 64
+Luas           : 924 piksel
+Bounding box   : (1114, 1242) - (1142, 1276)
+Ukuran bbox    : 29 x 35 piksel
+Centroid       : (1126.94, 1258.56)
+------------------------------------------------------------------------------------------
+Instance ID    : 65
+Luas           : 691 piksel
+Bounding box   : (1638, 1299) - (1672, 1334)
+Ukuran bbox    : 35 x 36 piksel
+Centroid       : (1654.55, 1315.44)
+------------------------------------------------------------------------------------------
+Instance ID    : 66
+Luas           : 684 piksel
+Bounding box   : (187, 1303) - (224, 1330)
+Ukuran bbox    : 38 x 28 piksel
+Centroid       : (204.52, 1315.34)
+------------------------------------------------------------------------------------------
+Instance ID    : 67
+Luas           : 6,642 piksel
+Bounding box   : (614, 1278) - (720, 1381)
+Ukuran bbox    : 107 x 104 piksel
+Centroid       : (667.69, 1326.43)
+------------------------------------------------------------------------------------------
+Instance ID    : 68
+Luas           : 258 piksel
+Bounding box   : (1431, 1312) - (1449, 1337)
+Ukuran bbox    : 19 x 26 piksel
+Centroid       : (1437.65, 1323.26)
+------------------------------------------------------------------------------------------
+Instance ID    : 69
+Luas           : 342 piksel
+Bounding box   : (1908, 1333) - (1952, 1351)
+Ukuran bbox    : 45 x 19 piksel
+Centroid       : (1934.46, 1341.23)
+------------------------------------------------------------------------------------------
+Instance ID    : 70
+Luas           : 6,921 piksel
+Bounding box   : (1958, 1301) - (2047, 1420)
+Ukuran bbox    : 90 x 120 piksel
+Centroid       : (2013.96, 1361.56)
+------------------------------------------------------------------------------------------
+Instance ID    : 71
+Luas           : 7,410 piksel
+Bounding box   : (1418, 1323) - (1530, 1438)
+Ukuran bbox    : 113 x 116 piksel
+Centroid       : (1479.87, 1386.74)
+------------------------------------------------------------------------------------------
+Instance ID    : 72
+Luas           : 33,256 piksel
+Bounding box   : (0, 1304) - (224, 1515)
+Ukuran bbox    : 225 x 212 piksel
+Centroid       : (103.85, 1404.94)
+------------------------------------------------------------------------------------------
+Instance ID    : 73
+Luas           : 209 piksel
+Bounding box   : (1031, 1419) - (1050, 1433)
+Ukuran bbox    : 20 x 15 piksel
+Centroid       : (1039.21, 1426.58)
+------------------------------------------------------------------------------------------
+Instance ID    : 74
+Luas           : 567 piksel
+Bounding box   : (1112, 1433) - (1149, 1455)
+Ukuran bbox    : 38 x 23 piksel
+Centroid       : (1132.56, 1444.35)
+------------------------------------------------------------------------------------------
+Instance ID    : 75
+Luas           : 469 piksel
+Bounding box   : (2021, 1446) - (2047, 1480)
+Ukuran bbox    : 27 x 35 piksel
+Centroid       : (2032.65, 1464.64)
+------------------------------------------------------------------------------------------
+Instance ID    : 76
+Luas           : 536 piksel
+Bounding box   : (1224, 1451) - (1244, 1480)
+Ukuran bbox    : 21 x 30 piksel
+Centroid       : (1234.58, 1464.93)
+------------------------------------------------------------------------------------------
+Instance ID    : 77
+Luas           : 186 piksel
+Bounding box   : (2017, 1508) - (2033, 1526)
+Ukuran bbox    : 17 x 19 piksel
+Centroid       : (2025.18, 1518.77)
+------------------------------------------------------------------------------------------
+Instance ID    : 78
+Luas           : 105 piksel
+Bounding box   : (1926, 1536) - (1938, 1546)
+Ukuran bbox    : 13 x 11 piksel
+Centroid       : (1932.33, 1540.8)
+------------------------------------------------------------------------------------------
+Instance ID    : 79
+Luas           : 689 piksel
+Bounding box   : (1864, 1544) - (1902, 1575)
+Ukuran bbox    : 39 x 32 piksel
+Centroid       : (1882.84, 1557.12)
+------------------------------------------------------------------------------------------
+Instance ID    : 80
+Luas           : 720 piksel
+Bounding box   : (594, 1548) - (641, 1579)
+Ukuran bbox    : 48 x 32 piksel
+Centroid       : (614.47, 1564.68)
+------------------------------------------------------------------------------------------
+Instance ID    : 81
+Luas           : 446 piksel
+Bounding box   : (668, 1596) - (698, 1623)
+Ukuran bbox    : 31 x 28 piksel
+Centroid       : (682.14, 1606.23)
+------------------------------------------------------------------------------------------
+Instance ID    : 82
+Luas           : 498 piksel
+Bounding box   : (642, 1589) - (667, 1615)
+Ukuran bbox    : 26 x 27 piksel
+Centroid       : (654.96, 1604.03)
+------------------------------------------------------------------------------------------
+Instance ID    : 83
+Luas           : 5,872 piksel
+Bounding box   : (63, 1589) - (148, 1708)
+Ukuran bbox    : 86 x 120 piksel
+Centroid       : (101.6, 1647.67)
+------------------------------------------------------------------------------------------
+Instance ID    : 84
+Luas           : 791 piksel
+Bounding box   : (329, 1632) - (357, 1673)
+Ukuran bbox    : 29 x 42 piksel
+Centroid       : (342.35, 1653.44)
+------------------------------------------------------------------------------------------
+Instance ID    : 85
+Luas           : 896 piksel
+Bounding box   : (695, 1636) - (727, 1674)
+Ukuran bbox    : 33 x 39 piksel
+Centroid       : (710.28, 1654.57)
+------------------------------------------------------------------------------------------
+Instance ID    : 86
+Luas           : 8,178 piksel
+Bounding box   : (575, 1609) - (699, 1719)
+Ukuran bbox    : 125 x 111 piksel
+Centroid       : (637.61, 1665.95)
+------------------------------------------------------------------------------------------
+Instance ID    : 87
+Luas           : 361 piksel
+Bounding box   : (2015, 1669) - (2040, 1693)
+Ukuran bbox    : 26 x 25 piksel
+Centroid       : (2028.0, 1681.45)
+------------------------------------------------------------------------------------------
+Instance ID    : 88
+Luas           : 511 piksel
+Bounding box   : (579, 1712) - (611, 1733)
+Ukuran bbox    : 33 x 22 piksel
+Centroid       : (594.31, 1722.99)
+------------------------------------------------------------------------------------------
+Instance ID    : 89
+Luas           : 147 piksel
+Bounding box   : (1579, 1725) - (1589, 1749)
+Ukuran bbox    : 11 x 25 piksel
+Centroid       : (1584.74, 1736.71)
+------------------------------------------------------------------------------------------
+Instance ID    : 90
+Luas           : 67 piksel
+Bounding box   : (2019, 1768) - (2027, 1777)
+Ukuran bbox    : 9 x 10 piksel
+Centroid       : (2023.67, 1773.48)
+------------------------------------------------------------------------------------------
+Instance ID    : 91
+Luas           : 1,111 piksel
+Bounding box   : (576, 1735) - (608, 1795)
+Ukuran bbox    : 33 x 61 piksel
+Centroid       : (591.54, 1764.1)
+------------------------------------------------------------------------------------------
+Instance ID    : 92
+Luas           : 2,160 piksel
+Bounding box   : (2017, 1750) - (2047, 1840)
+Ukuran bbox    : 31 x 91 piksel
+Centroid       : (2034.87, 1796.07)
+------------------------------------------------------------------------------------------
+Instance ID    : 93
+Luas           : 683 piksel
+Bounding box   : (1166, 1777) - (1198, 1816)
+Ukuran bbox    : 33 x 40 piksel
+Centroid       : (1178.8, 1797.68)
+------------------------------------------------------------------------------------------
+Instance ID    : 94
+Luas           : 5,005 piksel
+Bounding box   : (597, 1856) - (686, 1933)
+Ukuran bbox    : 90 x 78 piksel
+Centroid       : (641.99, 1890.65)
+------------------------------------------------------------------------------------------
+Instance ID    : 95
+Luas           : 1,195 piksel
+Bounding box   : (561, 1872) - (602, 1919)
+Ukuran bbox    : 42 x 48 piksel
+Centroid       : (582.85, 1896.5)
+------------------------------------------------------------------------------------------
+Instance ID    : 96
+Luas           : 3,226 piksel
+Bounding box   : (172, 1870) - (240, 1936)
+Ukuran bbox    : 69 x 67 piksel
+Centroid       : (205.04, 1903.69)
+------------------------------------------------------------------------------------------
+Instance ID    : 97
+Luas           : 19,945 piksel
+Bounding box   : (1459, 1754) - (1610, 1975)
+Ukuran bbox    : 152 x 222 piksel
+Centroid       : (1546.04, 1872.98)
+------------------------------------------------------------------------------------------
+Instance ID    : 98
+Luas           : 36,714 piksel
+Bounding box   : (692, 1827) - (932, 2047)
+Ukuran bbox    : 241 x 221 piksel
+Centroid       : (809.49, 1929.29)
+------------------------------------------------------------------------------------------
+Instance ID    : 99
+Luas           : 101 piksel
+Bounding box   : (489, 1918) - (501, 1929)
+Ukuran bbox    : 13 x 12 piksel
+Centroid       : (494.73, 1922.99)
+------------------------------------------------------------------------------------------
+Instance ID    : 100
+Luas           : 15,772 piksel
+Bounding box   : (214, 1856) - (375, 2002)
+Ukuran bbox    : 162 x 147 piksel
+Centroid       : (295.52, 1926.53)
+------------------------------------------------------------------------------------------
+Instance ID    : 101
+Luas           : 4,466 piksel
+Bounding box   : (364, 1887) - (432, 1973)
+Ukuran bbox    : 69 x 87 piksel
+Centroid       : (392.53, 1931.47)
+------------------------------------------------------------------------------------------
+Instance ID    : 102
+Luas           : 3,550 piksel
+Bounding box   : (564, 1919) - (629, 2000)
+Ukuran bbox    : 66 x 82 piksel
+Centroid       : (598.33, 1953.81)
+------------------------------------------------------------------------------------------
+Instance ID    : 103
+Luas           : 1,972 piksel
+Bounding box   : (171, 1937) - (218, 1990)
+Ukuran bbox    : 48 x 54 piksel
+Centroid       : (195.59, 1961.07)
+------------------------------------------------------------------------------------------
+Instance ID    : 104
+Luas           : 232 piksel
+Bounding box   : (1681, 1955) - (1698, 1976)
+Ukuran bbox    : 18 x 22 piksel
+Centroid       : (1688.6, 1966.91)
+------------------------------------------------------------------------------------------
+Instance ID    : 105
+Luas           : 3,223 piksel
+Bounding box   : (1010, 1931) - (1080, 1999)
+Ukuran bbox    : 71 x 69 piksel
+Centroid       : (1045.56, 1966.55)
+------------------------------------------------------------------------------------------
+Instance ID    : 106
+Luas           : 4,532 piksel
+Bounding box   : (81, 1954) - (190, 2047)
+Ukuran bbox    : 110 x 94 piksel
+Centroid       : (147.13, 2005.2)
+------------------------------------------------------------------------------------------
+Instance ID    : 107
+Luas           : 5,729 piksel
+Bounding box   : (506, 1946) - (579, 2047)
+Ukuran bbox    : 74 x 102 piksel
+Centroid       : (542.59, 1993.29)
+------------------------------------------------------------------------------------------
+Instance ID    : 108
+Luas           : 364 piksel
+Bounding box   : (70, 1990) - (95, 2013)
+Ukuran bbox    : 26 x 24 piksel
+Centroid       : (81.82, 2000.95)
+------------------------------------------------------------------------------------------
+Instance ID    : 109
+Luas           : 567 piksel
+Bounding box   : (593, 2000) - (623, 2030)
+Ukuran bbox    : 31 x 31 piksel
+Centroid       : (605.48, 2013.68)
+------------------------------------------------------------------------------------------
+Instance ID    : 110
+Luas           : 629 piksel
+Bounding box   : (53, 2015) - (88, 2047)
+Ukuran bbox    : 36 x 33 piksel
+Centroid       : (68.77, 2031.17)
+------------------------------------------------------------------------------------------
+Instance ID    : 111
+Luas           : 25,661 piksel
+Bounding box   : (1363, 1886) - (1613, 2047)
+Ukuran bbox    : 251 x 162 piksel
+Centroid       : (1475.25, 1984.17)
+------------------------------------------------------------------------------------------
+
+FILE OUTPUT
+------------------------------------------------------------------------------------------
+Semantic mask                 : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\semantic\1212_semantic.png
+Instance mask                 : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\instance\1212_instance.tif
+Semantic overlay              : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\overlay_semantic\1212_semantic_overlay.png
+Overlay biasa                 : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\overlay_normal\1212_normal_overlay.png
+Bounding box overlay          : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\overlay_bbox\1212_bbox_overlay.png
+Semantic preview              : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\detail\1212_semantic_preview.png
+Instance preview              : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\detail\1212_instance_preview.png
+CSV detail                    : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\detail\1212_instances.csv
+Statistics JSON               : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\statistics\1212_statistics.json
+Full frame                    : D:\MAHASISWA\SEMESTER 5\FUNGSIONAL\PRAKTIKUM\segmentation_models.pytorch\outputs\upernet\predictions\full_frame\1212_full_frame.png
